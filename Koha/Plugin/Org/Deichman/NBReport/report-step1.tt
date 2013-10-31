@@ -9,15 +9,19 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo; NBReport &rsaquo; Report &rsaquo; Trinn 1</div>
 
 <div id="doc3">
-  <h3>La oss komme igang</h3>
+  <h3>statistikk for inneværende år</h3>
 
-  <form method="get">
-                <input type="hidden" name="class" value="[% CLASS %]"/>
-                <input type="hidden" name="method" value="[% METHOD %]"/>
+  <h4>Antall fysiske og digitale enheter</h4>
 
-
-    <input type="submit" value="Generer rapport" />
-
-  </form>
+  <table>
+  <tr><th></th><th>Bestand pr. 31.12.[% year %]</th><th></th><th>Tilvekst i [% year %]</th><th></th><th>Avgang i [% year %]</th><th></th></tr>
+  [% FOREACH itype IN holdings %]
+  <tr><td title="Dokumenttype(r): [% itype.itypes %]">[% itype.name %]</td>
+      <td class="result">[% itype.holdings %]</td><td class="field">[% itype.holdings_n %]</td>
+      <td class="result">[% itype.added %]</td><td class="field">[% itype.added_n %]</td>
+      <td class="result">[% itype.deleted %]</td><td class="field">[% itype.deleted_n %]</td>
+  </tr>
+  [% END -%]
+  </table>
 
 [% INCLUDE 'intranet-bottom.inc' %]
