@@ -1,0 +1,23 @@
+[% INCLUDE 'doc-head-open.inc' %]
+ <title>Koha: NBReport plugin: Start herligheten</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo; NBReport &rsaquo; Report &rsaquo; Trinn 1</div>
+
+<div id="doc3">
+  <h3>La oss komme igang</h3>
+
+  <form method="get">
+                <input type="hidden" name="class" value="[% CLASS %]"/>
+                <input type="hidden" name="method" value="[% METHOD %]"/>
+
+
+    <input type="submit" value="Generer rapport" />
+
+  </form>
+
+[% INCLUDE 'intranet-bottom.inc' %]
