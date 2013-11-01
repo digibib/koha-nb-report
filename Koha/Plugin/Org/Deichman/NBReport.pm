@@ -38,7 +38,7 @@ sub report {
 
     $template->param(
         holdings => GetCounts(),
-        year => 2013,
+        year     => 2013,
     );
 
     print $cgi->header();
@@ -46,7 +46,7 @@ sub report {
 }
 
 sub GetCounts() {
-    my $dbh = C4::Context->dbh;
+    my $dbh  = C4::Context->dbh;
     my $year = 2013;
 
     my @itemtypes = (
@@ -67,6 +67,24 @@ sub GetCounts() {
             added_n    => '024',
             deleted    => 0,
             deleted_n  => '025'
+        },
+        {   name       => 'Annet bibliotekmateriale',
+            itypes     => ["X"],
+            holdings   => 0,
+            holdings_n => '035',
+            added      => 0,
+            added_n    => '036',
+            deleted    => 0,
+            deleted_n  => '037'
+        },
+        {   name       => 'Andre digitale dokumenter',
+            itypes     => ["MB", "MN", "GE"],
+            holdings   => 0,
+            holdings_n => '047',
+            added      => 0,
+            added_n    => '048',
+            deleted    => 0,
+            deleted_n  => '049'
         }
     );
 
@@ -77,7 +95,8 @@ sub GetCounts() {
         # 1. holdings
         my $hold_query = "SELECT count(biblionumber)
                           FROM items
-                          WHERE " . orify('itype', @{$itemtypes[$i]{'itypes'}});
+                          WHERE "
+            . orify( 'itype', @{ $itemtypes[$i]{'itypes'} } );
 
         my $hold_sth = $dbh->prepare($hold_query);
         $hold_sth->execute();
@@ -88,13 +107,15 @@ sub GetCounts() {
         my $acq_query = "SELECT count(biblionumber)
                          FROM items
                          WHERE YEAR(dateaccessioned) = $year
-                         AND " . orify('itype', @{$itemtypes[$i]{'itypes'}});
+                         AND "
+            . orify( 'itype', @{ $itemtypes[$i]{'itypes'} } );
 
         # 3. deletions
         my $del_query = "SELECT count(itemnumber)
                          FROM deleteditems
                          WHERE YEAR(timestamp) = $year
-                         AND " . orify('itype', @{$itemtypes[$i]{'itypes'}});
+                         AND "
+            . orify( 'itype', @{ $itemtypes[$i]{'itypes'} } );
         my $del_sth = $dbh->prepare($del_query);
         $del_sth->execute();
         my $del_count = $del_sth->fetchrow;
@@ -116,24 +137,23 @@ sub uninstall() {
     return 1;
 }
 
-
 # Utilities:
 
 # Takes the name of a column and an array of values and creates a list of ORed values:
 # In: orify('i.itype', ['DVD', 'LBOK', 'VID']);
 # Out: "(i.itype = 'DVD' OR i.itype = 'LBOK' OR i.itype = 'VID')"
 sub orify {
-        my $column = shift;
-        my @values = @_;
-        my $count = 0;
-        my $out = '(';
-        for my $value (@values) {
-                if ($count > 0) {
-                        $out .= " OR ";
-                }
-                $out .= "$column = '" . $value . "'";
-                $count++;
+    my $column = shift;
+    my @values = @_;
+    my $count  = 0;
+    my $out    = '(';
+    for my $value (@values) {
+        if ( $count > 0 ) {
+            $out .= " OR ";
         }
-        $out .= ')';
-        return $out;
+        $out .= "$column = '" . $value . "'";
+        $count++;
+    }
+    $out .= ')';
+    return $out;
 }
